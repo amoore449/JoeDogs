@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Joe's Hotdogs</title>
+		<style>
+			h1 {
+				background-color: #B22222;
+				color:#F8E490;
+				margin-left: 30%;
+				margin-right: 30%;
+			}
+			body {
+				text-align: center;
+			}
+			h2 {
+				background-color: #D7C57D;;
+				margin-left: 30%;
+				margin-right: 30%;
+			}
+			#butt {
+			  background-color: #0F110C; 
+			  border: none;
+			  color: #FDECEF;
+			  padding: 5px 5px;
+			  display: inline-block;
+			  font-size: 14px;
+			  margin-left: 30%;
+				margin-right: 30%;
+			}
+			#men {
+				background-color: #C9A459;
+				margin-left: 30%;
+				margin-right: 30%;
+			}
+			#food {
+				background-color: #C9A459;
+				margin-left: 30%;
+				margin-right: 30%;
+			}
+			#test
+			{
+				background-color: #F8E490;
+				color: #B22222;
+				margin-left: 30%;
+				margin-right: 30%;
+			}
+			#receipt
+			{
+				background-color: #F8E490;
+				color: #B22222;
+				margin-left: 30%;
+				margin-right: 30%;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Joe's Hotdog Stand</h1>
+		<h2>Menu</h2>
+	
+	<!--PRINT FOOD ELEMENTS USING AN ARRAY!-->
+		<h3 id=men></h3>
+		<h2>Order</h2>
+		<h3 id = "food"></h3>
+
+	<!--ENTER QUANTITIES!-->
+	<form>
+		<input type='button' id ="butt" onclick="getVal();" value="Order now">
+	</form>
+
+	<!-- FOR PRINTING RECEIPT!-->
+	<div id="test"></div>
+	<div id ="receipt"></div>
+
+	<script type="text/javascript">
+			/*MENU OBJECTS*/
+			var hotdog = {food: "Hotdogs", cost: 3.25, quantity: 0}
+			var fries = {food: "Fries",cost: 2.0,quantity: 0}
+			var drinks = {food: "Drinks",cost: 1.5,quantity: 0}
+
+			/*ARRAYS OF OBJECTS*/
+			var menu = [hotdog, fries, drinks];
+			var order = [hotdog, fries, drinks];
+			/*LOOP TO CREATE FORM*/
+			for (i = 0; i < menu.length; i++) {
+				var named = menu[i].food;
+				var sect = document.createElement(menu[i].food);
+				sect.setAttribute("id", menu[i].food);
+				document.getElementById("food").appendChild(sect);
+
+				make_item(i);
+				make_form(named);
+				document.getElementById("myorder").innerHTML += "<br>"; 
+			}
+
+		function getVal() {
+			document.getElementById("receipt").innerHTML = "";
+			var hotq= document.getElementById('Hotdogsform').value;
+			var fryq = document.getElementById('Friesform').value;
+			var drinkq = document.getElementById('Drinksform').value;
+
+			hotdog.quantity = hotq;
+			fries.quantity = fryq;
+			drinks.quantity =drinkq;
+
+			calc();
+		}
+
+		function calc() {
+			var basecase= new Array(0.0,0.0,0.0);
+			var total =0.0;
+			var discount = 0.0;
+			var subtotal = 0.0;
+			var tax = 0.0;
+			/*calculate base costs*/
+			for (i=0;i<menu.length;i++) {
+				basecase[i] = menu[i].cost * menu[i].quantity;
+				subtotal = subtotal + basecase[i];
+			}
+			document.getElementById("receipt").innerHTML += ("Subtotal: $" + subtotal.toFixed(2) + ".<br>");
+
+			/*add discount*/
+			if (subtotal >= 20.0) {
+				discount = subtotal*(-.1);
+				document.getElementById("receipt").innerHTML += ("Discount: $" + -discount.toFixed(2) + ".<br>");
+			}
+			/*add tax*/
+			tax = subtotal * .0625;
+
+			document.getElementById("receipt").innerHTML += ("Tax: $" + tax.toFixed(2) + ".<br>");
+			/*calc total*/
+			total = (discount +tax+subtotal);
+
+			document.getElementById("receipt").innerHTML += ("Total: $" + total.toFixed(2) + ".<br>");
+
+			report(subtotal, discount, tax, total);
+
+		}
+		function report () {
+
+			document.getElementById("test").innerHTML = ("You bought: <br> ");
+			for (i=0;i<menu.length;i++) {
+				if (menu[i].quantity > 0) {
+					document.getElementById("test").innerHTML += (menu[i].quantity + " " +menu[i].food + "<br>");
+				}
+
+			}
+
+			/*document.getElementById("receipt").innerHTML += ("The subtotal of these items was " + subtotal + ".<br>");
+			if (discount > 0) {
+			document.getElementById("receipt").innerHTML += ("You recieved a discount of " + discount + "!<br>");
+			}
+			document.getElementById("receipt").innerHTML += ("With a tax of " + tax + " your Order Total: " + total + ". <br>");*/
+
+		}
+		function make_item(i){
+				document.getElementById("men").innerHTML += (menu[i].food + "<br>"); 
+				document.getElementById("men").innerHTML += "Cost: " + menu[i].cost + "<br>"; 
+				document.getElementById("men").innerHTML += "<br>"; 
+
+			}
+
+			function make_form(i){
+			  var f = document.createElement("order");
+			  f.setAttribute("id", "myorder");
+			  document.getElementById(named).appendChild(f);
+
+			  var i = document.createElement("INPUT");
+			  i.setAttribute("type", "text");
+			  i.setAttribute("placeholder", "order quantity of " + named);
+			  i.setAttribute("id", named+"form");
+			  document.getElementById("myorder").appendChild(i);
+			}
+
+		</script>
+	</body>
+</html>
